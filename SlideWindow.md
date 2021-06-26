@@ -23,7 +23,7 @@ void slidingWindow(String s, String t) {
                 //左移窗口
                 left++;
                 //进行窗口内数据的一系列更新
-                
+                  d
             }
         }
     }
