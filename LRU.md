@@ -95,3 +95,62 @@ class DoubleList {
     }
 }
 ```
+1. 为什么使用双向链表： 我们需要删除操作，所以删除一个节点不仅需要该节点，还需要该节点的前驱节点，保证时间复杂度为O(1)
+2. 为什么链表中同时存储key和val，删除的时候，需要获取key从map中删除
+
+```
+class LRUCache {
+    // key -> Node(key,val)
+    private HashMap<Integer, Node> map;
+    //Node(k1,v1) <-> Node(k2,v2)
+    private DoubleList cache;
+    //最大容量
+    private int capacity;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        map = new HashMap<>();
+        cache = new DoubleList();
+    }
+
+    // 由于同时要维护一个map和cache，所以比较容易漏掉一些操作，所以提供一层抽象
+
+    //将某个key提升为最近使用
+    private void makeRecently(int key) {
+        Node x = map.get(key);
+        //先从链表中删除这个节点
+        cache.remove(x);
+        //重新插入到队尾
+        cache.addLast(x);
+    }
+
+    //添加最近使用的元素
+    private void addRecently(int key, int val) {
+        Node x = new Node(key, val);
+        //链表尾部就是最近使用的元素
+        cache.addLast(x);
+        //在map中添加key的映射
+        map.put(key, x);
+    }
+
+    //删除一个key
+    private void deleteKey(int key) {
+        Node x = map.get(key);
+        //从链表中删除
+        cache.remove(x);
+        //从map中删除
+        map.remove(key);
+
+    }
+
+    //删除最久未使用的元素
+    private void removeLeastRecently() {
+        //链表头部的第一个元素就是最久未使用的
+        Node deletedNode = cache.removeFirst();
+        //同时从map中删除
+        int deletedKey = deletedNode.key;
+        map.remove(deletedKey);
+    }
+}
+
+```
