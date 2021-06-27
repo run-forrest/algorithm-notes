@@ -151,6 +151,32 @@ class LRUCache {
         int deletedKey = deletedNode.key;
         map.remove(deletedKey);
     }
+    
+        public int get(int key) {
+        if (!map.containsKey(key)) {
+            return -1;
+        }
+        //将数据提升最近使用
+        makeRecently(key);
+        return map.get(key).val;
+    }
+
+    public void put(int key, int val) {
+        if (map.containsKey(key)) {
+            //删除旧数据
+            deleteKey(key);
+            //新插入的数据为最近使用的数据
+            addRecently(key, val);
+            return;
+        }
+
+        if (capacity == cache.size()) {
+            //删除最久未使用的元素
+            removeLeastRecently();
+        }
+        //添加为最近使用的元素
+        addRecently(key, val);
+    }
 }
 
 ```
