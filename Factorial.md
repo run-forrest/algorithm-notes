@@ -19,3 +19,5 @@ int trailingZeroes(int n) {
 }
 ```
 时间复杂度是底数为 5 的对数级，也就是O(logN)
+
+//todo 另外一个hard解法
